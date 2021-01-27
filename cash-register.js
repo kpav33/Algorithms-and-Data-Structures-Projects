@@ -20,9 +20,9 @@ function checkCashRegister(price, cash, cid) {
     // Return change by giving back the most valuable banknotes or coins that you have available in the register
     while (amount[i] <= changeToReturn && changeToReturn !== 0 && inRegister[i] !== 0) {
       // Subtract the returned money from the total value to return
-      changeToReturn = changeToReturn - amount[i];
+      changeToReturn -= amount[i];
       // Subtract the amount of available money in the register by the amount that you returned
-      inRegister[i] = inRegister[i] - amount[i];
+      inRegister[i] -= amount[i];
       // Add to array changes to the available money you have in the register
       changeArr.push(inRegister[i]);
       // Add to array how many banknotes and coin of each type you need to return
@@ -38,7 +38,6 @@ function checkCashRegister(price, cash, cid) {
       let newCount = i - 100
       amountArr.push(newCount);
     }
-
   }
 
   // Remove duplicates from amountArr
