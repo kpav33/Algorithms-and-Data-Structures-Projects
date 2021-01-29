@@ -4,7 +4,7 @@ function checkCashRegister(price, cash, cid) {
   let amount = [10000, 2000, 1000, 500, 100, 25, 10, 5, 1];
   let currency = ["ONE HUNDRED", "TWENTY", "TEN", "FIVE", "ONE", "QUARTER", "DIME", "NICKEL", "PENNY"];
   // Create an array of how much money is in the register in different coins and banknotes
-  // Multiply the value with 100 to avoid problems with decimal values
+  // Multiply the value with 100 to avoid problems with adding decimal values in JavaScript
   for (let i = 0; i < cid.length; i++) {
     inRegister.unshift(Math.ceil(cid[i][1] * 100));
   }
@@ -14,10 +14,11 @@ function checkCashRegister(price, cash, cid) {
   let changeArr = [];
   let amountArr = [];
   let countArr = [];
-  // Loop through the array with how much money you have in register
+  // Loop through the array where it shows how much money you have in register
   for (let i = 0; i < inRegister.length; i++) {
     let count = 0;
-    // Return change by giving back the most valuable banknotes or coins that you have available in the register
+    // Loop through amount array, starting with the highest available bank note or coin that you can use to return change
+    // First give back the most valuable banknotes or coins that you have available in the register
     while (amount[i] <= changeToReturn && changeToReturn !== 0 && inRegister[i] !== 0) {
       // Subtract the returned money from the total value to return
       changeToReturn -= amount[i];
@@ -33,7 +34,7 @@ function checkCashRegister(price, cash, cid) {
     countArr.push(count);
     // If a banknote or coin value is bigger than the change to return, the while loop doesn't execute and the count remains at value zero
     // If the count is zero subtract 100 from it to get a negative value
-    // This code is used to make sure the code for removing duplicates works the way I need it to
+    // This code is used to make sure the code for removing duplicates in the amountArr array works the way I need it to
     if (count === 0) {
       let newCount = i - 100
       amountArr.push(newCount);
@@ -42,18 +43,18 @@ function checkCashRegister(price, cash, cid) {
 
   // Remove duplicates from amountArr
   let duplicates = [...new Set(amountArr)];
-  // Create an array of the final value to return in banknotes and coins
+  // Create an array of the final change value to return in different banknotes and coins
   let changeToReturnArr = [];
   for (let i = 0; i < countArr.length; i++) {
     if (countArr[i] > 0) {
       changeToReturnArr.push([currency[i], duplicates[i] * countArr[i]]);
     }
   }
-  // Check if there is change available to return right amount of money
+  // Check if there is enough change available to return right amount of money
   let enoughChange = changeArr.reduce((a, b) => {
     return a + b;
   });
-  // Check if there is any money in the register
+  // Check if there is any money left in the register
   let emptyRegister = inRegister.reduce((a, b) => {
     return a + b;
   });
@@ -68,6 +69,7 @@ function checkCashRegister(price, cash, cid) {
     statusMessage = "OPEN";
   }
 
+  // Build an object with the status and change key that the program returns
   let obj = {
     status: statusMessage,
     change: changeToReturnArr
